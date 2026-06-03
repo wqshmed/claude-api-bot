@@ -1,0 +1,9 @@
+# Production. Most-capable model, quiet logging.
+anthropic:
+  model: claude-opus-4-8
+  max-tokens: 8192
+
+logging:
+  level:
+    com.gkglobal.chatbot: INFO
+    root: WARN

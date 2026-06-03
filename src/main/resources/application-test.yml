@@ -1,0 +1,11 @@
+# Automated tests. Cheap model, small token budget, random port to avoid clashes.
+server:
+  port: 0
+
+anthropic:
+  model: claude-opus-4-8
+  max-tokens: 1024
+
+logging:
+  level:
+    com.gkglobal.chatbot: INFO
