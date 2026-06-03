@@ -1,7 +1,7 @@
 # Pre-production staging. Production-like model, moderate logging.
 anthropic:
   model: claude-opus-4-8
-  max-tokens: 8192
+  max-tokens: 500
 
 logging:
   level:

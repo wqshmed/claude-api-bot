@@ -1,7 +1,7 @@
 # Production. Most-capable model, quiet logging.
 anthropic:
   model: claude-opus-4-8
-  max-tokens: 8192
+  max-tokens: 1000
 
 logging:
   level:

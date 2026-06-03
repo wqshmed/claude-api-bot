@@ -4,7 +4,7 @@ server:
 
 anthropic:
   model: claude-opus-4-8
-  max-tokens: 1024
+  max-tokens: 400
 
 logging:
   level:

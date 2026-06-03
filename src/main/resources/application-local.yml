@@ -1,7 +1,7 @@
 # Local developer machine. Cheap/fast model, verbose logging.
 anthropic:
   model: claude-opus-4-8
-  max-tokens: 4096
+  max-tokens: 100
 
 logging:
   level:
