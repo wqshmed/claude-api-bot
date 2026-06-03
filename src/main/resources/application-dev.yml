@@ -1,7 +1,7 @@
 # Shared development environment. Cheap/fast model, debug logging.
 anthropic:
   model: claude-haiku-4-5
-  max-tokens: 4096
+  max-tokens: 200
 
 logging:
   level:

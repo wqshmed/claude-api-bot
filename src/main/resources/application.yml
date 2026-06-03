@@ -17,4 +17,4 @@ anthropic:
   # Claude model. Profiles below pick cheaper/faster vs. most-capable models.
   model: claude-opus-4-8
   # Upper bound on generated tokens (includes adaptive thinking tokens).
-  max-tokens: 8192
+  max-tokens: 500
