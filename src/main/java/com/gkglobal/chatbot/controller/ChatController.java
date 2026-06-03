@@ -24,15 +24,18 @@ public class ChatController {
     }
 
     /**
-     * POST /api/chat  with body {@code {"message": "..."}}
-     * returns {@code {"reply": "..."}}.
+     * POST /api/chat  with body {@code {"message": "...", "conversationId": "..."}}
+     * returns {@code {"reply": "...", "conversationId": "..."}}.
+     *
+     * <p>Omit {@code conversationId} to start a new thread; send the id from the
+     * response on the next turn to continue it.
      */
     @PostMapping
     public ChatResponse chat(@RequestBody ChatRequest request) {
         if (request == null || request.message() == null || request.message().isBlank()) {
             throw new IllegalArgumentException("Field 'message' is required and cannot be empty.");
         }
-        return new ChatResponse(chatService.reply(request.message()));
+        return chatService.reply(request.conversationId(), request.message());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
