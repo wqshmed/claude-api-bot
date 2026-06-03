@@ -7,7 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A minimal Spring Boot REST service that wraps the **Claude API** via the official
 **Anthropic Java SDK** (`com.anthropic:anthropic-java`). It exposes one endpoint,
 `POST /api/chat`, that forwards a user message to Claude and returns the text reply.
-Built as a learning chatbot.
+Supports **multi-turn conversations**: a request may carry a `conversationId`, and
+the service replays that conversation's prior turns so Claude has context. Built as
+a learning chatbot.
 
 ## Commands
 
@@ -42,13 +44,23 @@ with `mvn spring-boot:run`, not just `mvn compile`. Alternatively, lower
 ## Architecture
 
 Request flow: `ChatController` (`POST /api/chat`) → `ChatService` → Anthropic SDK
-→ Claude API. DTOs (`ChatRequest`/`ChatResponse`) are Java records.
+→ Claude API. DTOs (`ChatRequest`/`ChatResponse`) are Java records; both carry an
+optional `conversationId`.
 
 - **`config/AnthropicConfig`** — single `AnthropicClient` bean built with
   `AnthropicOkHttpClient.fromEnv()`. The client is reused across all requests.
+- **`service/ConversationStore`** — in-memory per-conversation history, a
+  `ConcurrentHashMap<String, List<Turn>>` where `Turn` is `(Role, text)`.
+  **Not persisted, no eviction, unbounded per conversation, lost on restart** —
+  swap for a real store and add a cap before production use.
 - **`service/ChatService`** — builds `MessageCreateParams` and calls
   `client.messages().create(...)`. Key choices:
-  - Model and max-tokens come from `application.properties`
+  - `reply(conversationId, userMessage)` generates a UUID when `conversationId`
+    is blank/null, replays the stored turns via `addUserMessage`/
+    `addAssistantMessage`, appends the new message, then persists both the user
+    turn and the assistant reply back to `ConversationStore`. Returns a
+    `ChatResponse` carrying the (possibly new) `conversationId`.
+  - Model and max-tokens come from `application.yml` / `application-{profile}.yml`
     (`anthropic.model`, `anthropic.max-tokens`), injected via `@Value`.
   - **Adaptive thinking** is enabled (`ThinkingConfigAdaptive`); only text blocks
     are collected from the response (`block.text()` stream), thinking is ignored.
@@ -63,5 +75,7 @@ Request flow: `ChatController` (`POST /api/chat`) → `ChatService` → Anthropi
 - **groupId vs package:** Maven `groupId` is `com.gk-global` (hyphen is valid in
   coordinates); Java source uses package `com.gkglobal.chatbot` because package
   names cannot contain hyphens. Keep new source under `com.gkglobal.chatbot`.
-- Default model is `claude-opus-4-8`; switch to `claude-haiku-4-5` via
-  `application.properties` for cheaper/faster runs.
+- Default model is `claude-opus-4-8` (base `application.yml`); the `dev` profile
+  uses `claude-haiku-4-5` for cheaper/faster runs. Config is YAML across
+  `application.yml` + `application-{profile}.yml` (default profile: `local`),
+  not `application.properties`.
