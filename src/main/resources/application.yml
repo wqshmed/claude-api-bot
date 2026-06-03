@@ -1,0 +1,20 @@
+# Base configuration shared by every profile.
+# Profile-specific overrides live in application-{profile}.yml.
+# Activate a profile with: --spring.profiles.active=dev  (or SPRING_PROFILES_ACTIVE env var)
+spring:
+  application:
+    name: claude-api-bot
+  profiles:
+    # Default profile when none is supplied. Override via SPRING_PROFILES_ACTIVE.
+    default: local
+
+server:
+  port: 8080
+
+anthropic:
+  # The SDK reads ANTHROPIC_API_KEY from the environment; this binds it for @Value.
+  api-key: ${ANTHROPIC_API_KEY}
+  # Claude model. Profiles below pick cheaper/faster vs. most-capable models.
+  model: claude-opus-4-8
+  # Upper bound on generated tokens (includes adaptive thinking tokens).
+  max-tokens: 8192

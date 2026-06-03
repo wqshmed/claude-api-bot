@@ -1,0 +1,8 @@
+# Local developer machine. Cheap/fast model, verbose logging.
+anthropic:
+  model: claude-opus-4-8
+  max-tokens: 4096
+
+logging:
+  level:
+    com.gkglobal.chatbot: DEBUG
