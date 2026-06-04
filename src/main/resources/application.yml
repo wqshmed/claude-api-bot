@@ -18,3 +18,9 @@ anthropic:
   model: claude-opus-4-8
   # Upper bound on generated tokens (includes adaptive thinking tokens).
   max-tokens: 500
+
+# Personal-assistant context injected into the system prompt. Edit the JSON to
+# add details about yourself. Point this at a file:/... path to keep it outside
+# the build. Read once at startup — restart to pick up edits.
+assistant:
+  context-file: classpath:assistant-context.json

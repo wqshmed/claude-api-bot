@@ -1,0 +1,39 @@
+{
+  "owner": {
+    "name": "Waqas",
+    "role": "Engineering Manager",
+    "company": "Deloitte",
+    "location": "U.S.A",
+    "timezone": "EST",
+    "email": "waqas.xhmed@gmail.com",
+    "phone": "999-999-9999"
+  },
+  "preferences": {
+    "communication_style": "concise, friendly, and direct",
+    "languages": ["English", "Urdu"],
+    "working_hours": "9-5",
+    "interests": ["Gardening, Exercise, Gym"]
+  },
+  "people": {
+    "_comment": "Map of names to who they are, e.g. \"Sara\": \"my manager\"",
+    "example": "relationship / role"
+  },
+  "projects": {
+    "_comment": "Engineering Manager at retail client",
+    "example_project": {
+      "description": "Next Generation Point Of Sale",
+      "status": "Active",
+      "deadline": "2027"
+    }
+  },
+  "schedule": {
+    "_comment": "Recurring commitments or important dates",
+    "recurring": [],
+    "important_dates": []
+  },
+  "facts": [
+    "Add any free-form fact you want the assistant to always know here.",
+    "Example: I prefer morning meetings.",
+    "Example: My main car is a 2020 Honda Civic."
+  ]
+}
