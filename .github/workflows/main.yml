@@ -14,7 +14,7 @@ jobs:
     uses: wqshmed/common_workflows/.github/workflows/main.yml@main
     with:
       java_version: ${{ env.JAVA_VERSION }}
-      docker_image_name: ${{ env.IMAGE_NAME }}
+      image_name: ${{ env.IMAGE_NAME }}
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
