@@ -12,16 +12,12 @@ on:
       - 'hotfix/**'
       - 'bugfix/**'
 
-env:
-  JAVA_VERSION: '21'
-  IMAGE_NAME: 'wqshmed/claude-api-bot'
-
 jobs:
   feature-branch-build:
     uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
     with:
-      java_version: ${{ env.JAVA_VERSION }}
-      docker_image_name: ${{ env.IMAGE_NAME }}
+      java_version: '21'
+      docker_image_name: 'wqshmed/claude-api-bot'
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

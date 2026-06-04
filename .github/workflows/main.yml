@@ -5,16 +5,12 @@ on:
     branches:
       - main
 
-env:
-  JAVA_VERSION: '21'
-  IMAGE_NAME: 'wqshmed/claude-api-bot'
-
 jobs:
   pipeline:
     uses: wqshmed/common_workflows/.github/workflows/main.yml@main
     with:
-      java_version: ${{ env.JAVA_VERSION }}
-      image_name: ${{ env.IMAGE_NAME }}
+      java_version: '21'
+      docker_image_name: 'wqshmed/claude-api-bot'
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
