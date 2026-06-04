@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'feat*'
+      - 'feature/**'
+      - 'feature*'
+
+env:
+  JAVA_VERSION: '21'
+  IMAGE_NAME: 'wqshmed/claude-api-bot'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      java_version: ${{ steps.vars.outputs.java_version }}
+    steps:
+      - name: Set variables
+        id: vars
+        run: echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
+
+  checkstyle:
+    needs: setup
+    uses: wqshmed/common_workflows/.github/workflows/checkstyle.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+
+  build:
+    needs: [setup, checkstyle]
+    uses: wqshmed/common_workflows/.github/workflows/build.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+
+  unit_tests:
+    needs: [setup, build]
+    uses: wqshmed/common_workflows/.github/workflows/unit_tests.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+
+  integration_tests:
+    needs: [setup, build]
+    uses: wqshmed/common_workflows/.github/workflows/integration_tests.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
