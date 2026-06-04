@@ -27,7 +27,7 @@ jobs:
         run: echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
 
   checkstyle:
-    needs: checkstyle
+    needs: setup
     uses: wqshmed/common_workflows/.github/workflows/checkstyle.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
