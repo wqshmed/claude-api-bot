@@ -33,19 +33,19 @@ jobs:
       java_version: ${{ needs.setup.outputs.java_version }}
 
   build:
-    needs: checkstyle
+    needs: [setup, checkstyle]
     uses: wqshmed/common_workflows/.github/workflows/build.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
 
   unit_tests:
-    needs: build
+    needs: [setup, build]
     uses: wqshmed/common_workflows/.github/workflows/unit_tests.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
 
   integration_tests:
-    needs: build
+    needs: [setup, build]
     uses: wqshmed/common_workflows/.github/workflows/integration_tests.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
