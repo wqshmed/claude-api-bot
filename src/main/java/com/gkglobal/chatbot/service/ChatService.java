@@ -31,26 +31,47 @@ public class ChatService {
      * stable context (docs, examples, instructions).
      */
     private static final String SYSTEM_PROMPT = """
-            You are a friendly, patient programming tutor that helps people learn.
-            Explain concepts clearly and concisely, use small concrete examples,
-            and prefer plain language over jargon. When you show code, keep it
-            minimal and runnable. If a question is ambiguous, ask one brief
-            clarifying question before answering.
+            You are a helpful personal assistant for one specific user.
+            Use the details below about the user and their world to give answers
+            tailored to them. Treat that information as authoritative. When a
+            question can be answered from those details, answer from them
+            directly; if the relevant detail isn't there, say so briefly and
+            answer as best you can. Keep replies concise and friendly, and ask
+            one short clarifying question when a request is ambiguous.
             """;
 
     private final AnthropicClient client;
     private final ConversationStore conversations;
+    private final AssistantContext context;
     private final String model;
     private final long maxTokens;
 
     public ChatService(AnthropicClient client,
                         ConversationStore conversations,
+                        AssistantContext context,
                         @Value("${anthropic.model}") String model,
                         @Value("${anthropic.max-tokens}") long maxTokens) {
         this.client = client;
         this.conversations = conversations;
+        this.context = context;
         this.model = model;
         this.maxTokens = maxTokens;
+    }
+
+    /**
+     * The full, stable system text: the persona plus the user's personal
+     * context (as JSON). Both are constant across requests, so the whole block
+     * carries the {@code cache_control} breakpoint and is reused on every turn.
+     */
+    private String systemText() {
+        if (!context.isPresent()) {
+            return SYSTEM_PROMPT;
+        }
+        return SYSTEM_PROMPT + """
+
+                Here is everything you know about the user, as JSON:
+
+                """ + context.details();
     }
 
     /**
@@ -77,7 +98,7 @@ public class ChatService {
                 .thinking(ThinkingConfigAdaptive.builder().build())
                 .systemOfTextBlockParams(List.of(
                         TextBlockParam.builder()
-                                .text(SYSTEM_PROMPT)
+                                .text(systemText())
                                 .cacheControl(CacheControlEphemeral.builder().build())
                                 .build()));
 
