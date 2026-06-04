@@ -21,10 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       java_version: ${{ steps.vars.outputs.java_version }}
+      image_name: ${{ steps.vars.outputs.image_name }}
     steps:
       - name: Set variables
         id: vars
-        run: echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
+          echo "image_name=${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
 
   checkstyle:
     needs: setup
@@ -51,12 +54,12 @@ jobs:
       java_version: ${{ needs.setup.outputs.java_version }}
 
   dockerize:
-    needs: [ unit_tests, integration_tests ]
+    needs: [setup, unit_tests, integration_tests]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: wqshmed/common_workflows/.github/workflows/dockerize.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
-      image_name: ${{ env.IMAGE_NAME }}
+      image_name: ${{ needs.setup.outputs.image_name }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
