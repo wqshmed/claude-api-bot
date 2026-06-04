@@ -63,7 +63,6 @@ jobs:
 
   dockerize:
     needs: [setup, unit_tests, integration_tests]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: wqshmed/common_workflows/.github/workflows/dockerize.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
