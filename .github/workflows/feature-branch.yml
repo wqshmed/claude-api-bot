@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - 'feat/**'
+      - 'feature/**'
+      - 'hotfix/**'
+      - 'bugfix/**'
+
+env:
+  JAVA_VERSION: '21'
+  IMAGE_NAME: 'wqshmed/claude-api-bot'
+
+jobs:
+  pipeline:
+    uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
+    with:
+      java_version: ${{ env.JAVA_VERSION }}
+      docker_image_name: ${{ env.IMAGE_NAME }}
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
