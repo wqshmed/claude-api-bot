@@ -8,9 +8,7 @@ on:
     branches:
       - main
       - 'feat/**'
-      - 'feat*'
       - 'feature/**'
-      - 'feature*'
 
 env:
   JAVA_VERSION: '21'
@@ -21,10 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       java_version: ${{ steps.vars.outputs.java_version }}
+      image_name: ${{ steps.vars.outputs.image_name }}
     steps:
       - name: Set variables
         id: vars
-        run: echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "java_version=${{ env.JAVA_VERSION }}" >> $GITHUB_OUTPUT
+          echo "image_name=${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
 
   checkstyle:
     needs: setup
@@ -38,6 +39,16 @@ jobs:
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
 
+  sonar_scan:
+    needs: [setup, checkstyle]
+    uses: wqshmed/common_workflows/.github/workflows/sonar_scan.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+      project_key: 'claude-api-bot'
+      organization: 'wqshmed-sonar'
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   unit_tests:
     needs: [setup, build]
     uses: wqshmed/common_workflows/.github/workflows/unit_tests.yml@main
@@ -49,3 +60,13 @@ jobs:
     uses: wqshmed/common_workflows/.github/workflows/integration_tests.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
+
+  dockerize:
+    needs: [setup, unit_tests, integration_tests]
+    uses: wqshmed/common_workflows/.github/workflows/dockerize.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+      image_name: ${{ needs.setup.outputs.image_name }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
