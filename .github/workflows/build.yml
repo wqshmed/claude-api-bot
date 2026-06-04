@@ -47,7 +47,7 @@ jobs:
       project_key: 'claude-api-bot'
       organization: 'wqshmed-sonar'
     secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} //expires Aug 3, 2026
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   unit_tests:
     needs: [setup, build]
