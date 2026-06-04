@@ -8,9 +8,7 @@ on:
     branches:
       - main
       - 'feat/**'
-      - 'feat*'
       - 'feature/**'
-      - 'feature*'
 
 env:
   JAVA_VERSION: '21'
@@ -40,6 +38,16 @@ jobs:
     uses: wqshmed/common_workflows/.github/workflows/build.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
+
+  sonar_scan:
+    needs: [setup, checkstyle]
+    uses: wqshmed/common_workflows/.github/workflows/sonar_scan.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+      project_key: 'claude-api-bot'
+      organization: 'wqshmed-sonar'
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} //expires Aug 3, 2026
 
   unit_tests:
     needs: [setup, build]
