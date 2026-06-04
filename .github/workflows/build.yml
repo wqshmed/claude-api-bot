@@ -49,3 +49,14 @@ jobs:
     uses: wqshmed/common_workflows/.github/workflows/integration_tests.yml@main
     with:
       java_version: ${{ needs.setup.outputs.java_version }}
+
+  dockerize:
+    needs: [ unit_tests, integration_tests ]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: wqshmed/common_workflows/.github/workflows/dockerize.yml@main
+    with:
+      java_version: ${{ needs.setup.outputs.java_version }}
+      image_name: ${{ env.IMAGE_NAME }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
