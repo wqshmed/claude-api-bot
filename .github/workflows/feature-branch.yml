@@ -17,7 +17,7 @@ env:
   IMAGE_NAME: 'wqshmed/claude-api-bot'
 
 jobs:
-  pipeline:
+  feature-branch-build:
     uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
     with:
       java_version: ${{ env.JAVA_VERSION }}
