@@ -13,7 +13,7 @@ on:
       - 'bugfix/**'
 
 jobs:
-  feature-branch-build:
+  feature-build:
     uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
     with:
       java_version: '21'
