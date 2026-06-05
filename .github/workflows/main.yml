@@ -10,7 +10,9 @@ jobs:
     uses: wqshmed/common_workflows/.github/workflows/main.yml@main
     with:
       java_version: '21'
-      docker_image_name: 'wqshmed/claude-api-bot'
+      image_name: 'wqshmed/claude-api-bot'
+      project_key: 'claude-api-bot'
+      organization: 'wqshmed-sonar'
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
