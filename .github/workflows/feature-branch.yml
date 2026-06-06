@@ -15,7 +15,7 @@ on:
 
 jobs:
   feature-build:
-    uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@feature/main-branch-wf-update
+    uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
     with:
       java_version: '21'
       image_name: 'wqshmed/claude-api-bot'

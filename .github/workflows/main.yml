@@ -7,7 +7,7 @@ on:
 
 jobs:
   pipeline:
-    uses: wqshmed/common_workflows/.github/workflows/main-branch.yml@feature/main-branch-wf-update
+    uses: wqshmed/common_workflows/.github/workflows/main-branch.yml@main
     with:
       java_version: '21'
       image_name: 'wqshmed/claude-api-bot'
