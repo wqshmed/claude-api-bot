@@ -15,12 +15,12 @@ on:
 
 jobs:
   feature-build:
-    uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@feature/main-branch-wf-update
+    uses: wqshmed/common_workflows/.github/workflows/feature-branch.yml@main
     with:
       java_version: '21'
       image_name: 'wqshmed/claude-api-bot'
-      project_key: 'claude-api-bot'
-      organization: 'wqshmed-sonar'
+      sonar_project_key: 'claude-api-bot'
+      sonar_organization: 'wqshmed-sonar'
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
